@@ -1,0 +1,11 @@
+package mini_auv_gazebo_msgs.msgs;
+
+message ThrustCmd
+{
+  required double thruster1 = 1 [default = 0.0];
+  required double thruster2 = 2 [default = 0.0];
+  required double thruster3 = 3 [default = 0.0];
+  required double thruster4 = 4 [default = 0.0];
+  required double thruster5 = 5 [default = 0.0];
+  required double thruster6 = 6 [default = 0.0];
+}

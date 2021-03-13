@@ -1,0 +1,6 @@
+package mini_auv_gazebo_msgs.msgs;
+
+message Double
+{
+  required double data = 1 [default = 0.0];
+}
