@@ -23,3 +23,9 @@ target_link_libraries(PIDController6DOF_TEST PIDController6DOF)
 
 add_library(PicoPIDController src/PicoPIDController.cc)
 target_link_libraries(PicoPIDController Eigen3::Eigen PIDController6DOF)
+
+add_executable(MainPicoControl src/MainPicoControl.cc)
+target_link_libraries(MainPicoControl ${GAZEBO_LIBRARIES} PicoPIDController mini_auv_gazebo_msgs)
+add_dependencies(MainPicoControl mini_auv_gazebo_msgs)
+
+
