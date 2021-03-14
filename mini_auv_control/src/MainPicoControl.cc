@@ -75,7 +75,7 @@ int main(int _argc, char **_argv){
         thrust_cmd.set_thruster5(thrusts[4]);
         thrust_cmd.set_thruster6(thrusts[5]);
 
-        //pulish the thrusts to the robot in Gazebo 
+        //publish the thrusts to the robot in Gazebo 
         thrust_cmd_pub->Publish(thrust_cmd);
         gazebo::common::Time::MSleep(10);
     }
