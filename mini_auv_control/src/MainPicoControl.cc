@@ -25,7 +25,7 @@ double roll = 0.0, pitch = 0.0, yaw = 0.0, x = 0.0, y = 0.0, z = 0.0;
 std::chrono::duration<double> dt(0.010);
 
 //Set point is the desired position of the vehicle
-std::vector<double> set_pt = {0.0, 0.0, 0.0, 0.0, 0.0, 3.0}; // r p yaw x y z
+std::vector<double> set_pt = {0.0, 0.0, 3.14, 0.0, 0.0, 10.0}; // r p yaw x y z
 
 int main(int _argc, char **_argv){
     
@@ -67,6 +67,10 @@ int main(int _argc, char **_argv){
         
         Vector6d thrusts = pico_pid_controller.update(set_pt, process_pt, dt);
         
+
+        //std::cout << '\n';
+        //for(int i = 0; i < 6; i++){std::cout << thrusts[i] << '\t';}
+        //std::cout << '\n';
         //package the thrusts values into the protobuf message.
         thrust_cmd.set_thruster1(thrusts[0]);
         thrust_cmd.set_thruster2(thrusts[1]);
@@ -91,6 +95,22 @@ void initialize_pid_controller(PicoPIDController *controller){
 
     controller->set_pitch_gains(0.0, 0.0, 0.0);
     controller->set_pitch_I_limits(-0.1, 0.1);
+
+    controller->set_yaw_gains(0.15, 0.0, 0.10);
+    //controller->set_yaw_I_limits(-0.1, 0.1);
+    controller->set_yaw_cmd_limits(-0.25, 0.25);
+    
+    controller->set_x_gains(0.0, 0.0, 0.0);
+    controller->set_x_I_limits(-0.1, 0.1);
+    
+    controller->set_y_gains(0.0, 0.0, 0.0);
+    controller->set_y_I_limits(-0.1, 0.1);
+
+    controller->set_z_gains(0.50, 0.05, 0.50);
+    controller->set_z_I_limits(-0.1, 0.1);
+    controller->set_z_cmd_offsets(2.54);
+    controller->set_z_cmd_limits(-2.74, 2.74);
+
 }
 
 void depth_unpack_callback(DoublePtr &depth_msg){
@@ -111,7 +131,7 @@ void imu_unpack_callback(IMUPtr &imu_msg){
     pitch = Q.Pitch();
     //  TODO: THIS MAY NOT BE THE CORRECT YAW: USE MAGNETOMETER.
     yaw = Q.Yaw();
-
+    
     std::cout << "Orientation --" << '\n';
     std::cout << "\tRoll:  " << roll << '\n';
     std::cout << "\tPitch: " << pitch << '\n';

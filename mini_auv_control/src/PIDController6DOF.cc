@@ -130,6 +130,43 @@ void PIDController6DOF::_set_cmd_limits(double _cmd_min, double _cmd_max, int _i
     pid_controllers[_index].SetCmdMax(_cmd_max);
 }
 
+void PIDController6DOF::set_roll_cmd_offsets(double offset){
+    
+    _set_cmd_offsets(offset, 0);
+}
+
+void PIDController6DOF::set_pitch_cmd_offsets(double offset){
+    _set_cmd_offsets(offset, 1);
+}
+
+void PIDController6DOF::set_yaw_cmd_offsets(double offset){
+    _set_cmd_offsets(offset, 2);
+}
+
+void PIDController6DOF::set_x_cmd_offsets(double offset){
+    
+    _set_cmd_offsets(offset, 3);
+}
+
+void PIDController6DOF::set_y_cmd_offsets(double offset){
+
+
+    _set_cmd_offsets(offset, 4);
+}
+    
+void PIDController6DOF::set_z_cmd_offsets(double offset){
+
+
+    _set_cmd_offsets(offset, 5);
+}
+
+void PIDController6DOF::_set_cmd_offsets(double _offset, int _index){
+    
+    pid_controllers[_index].SetCmdOffset(_offset);
+
+}
+
+
 //Angles must be in radians
 double PIDController6DOF::angle_wrap_error(double des_angle, double curr_angle){
    
@@ -182,7 +219,7 @@ std::vector<double> PIDController6DOF::update(std::vector<double> &set_pt, std::
         if(i < 3)  error = angle_wrap_error(set_pt[i], process_pt[i]);
         else       error = set_pt[i] - process_pt[i];
         
-        cmds.push_back(pid_controllers[i].Update(-1*error, dt));
+        cmds.push_back(pid_controllers[i].Update(1*error, dt));
     }
 
     return(cmds);

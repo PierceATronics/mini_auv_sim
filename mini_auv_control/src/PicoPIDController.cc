@@ -5,12 +5,12 @@ PicoPIDController::PicoPIDController(){
     // Construct base class
     PIDController6DOF();
     
-    pid_thruster_mapper << 1,  1,  0,  0,  0,  1,
+    pid_thruster_mapper << 1,  1,  0,  0,  0,  -1,
                            0,  0,  1,  1,  0,  0,
-                           1, -1,  0,  0,  0,  1,
-                          -1, -1,  0,  0,  0,  1,
+                           1, -1,  0,  0,  0,  -1,
+                          -1, -1,  0,  0,  0,  -1,
                            0,  0, -1,  1,  0,  0,
-                          -1,  1,  0,  0,  0,  1;  
+                          -1,  1,  0,  0,  0,  -1;  
 
 }
 

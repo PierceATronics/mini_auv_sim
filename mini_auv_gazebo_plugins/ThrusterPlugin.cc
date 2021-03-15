@@ -52,10 +52,10 @@ namespace gazebo
 
           
           thrusterLinks[0]->AddRelativeForce(ignition::math::Vector3d(0, 0, thrusts[0]));
-          thrusterLinks[1]->AddRelativeForce(ignition::math::Vector3d(0, 0, thrusts[1]));
+          thrusterLinks[1]->AddRelativeForce(ignition::math::Vector3d(thrusts[1], 0, 0));
           thrusterLinks[2]->AddRelativeForce(ignition::math::Vector3d(0, 0, thrusts[2]));
           thrusterLinks[3]->AddRelativeForce(ignition::math::Vector3d(0, 0, thrusts[3]));
-          thrusterLinks[4]->AddRelativeForce(ignition::math::Vector3d(0, 0, thrusts[4]));
+          thrusterLinks[4]->AddRelativeForce(ignition::math::Vector3d(thrusts[4],0, 0));
           thrusterLinks[5]->AddRelativeForce(ignition::math::Vector3d(0, 0, thrusts[5]));
 
 

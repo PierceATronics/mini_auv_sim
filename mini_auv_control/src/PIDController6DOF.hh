@@ -48,6 +48,21 @@ class PIDController6DOF{
 
         void _set_cmd_limits(double _cmd_min, double _cmd_max, int _index);
 
+        void set_roll_cmd_offsets(double offset);
+
+        void set_pitch_cmd_offsets(double offset);
+
+        void set_yaw_cmd_offsets(double offset);
+
+        void set_x_cmd_offsets(double offset);
+
+        void set_y_cmd_offsets(double offset);
+    
+        void set_z_cmd_offsets(double offset);
+
+        void _set_cmd_offsets(double _offset, int _index);
+
+
         //  Determine correct error value for angle values between -pi and pi
         double angle_wrap_error(double des_angle, double curr_angle);
         

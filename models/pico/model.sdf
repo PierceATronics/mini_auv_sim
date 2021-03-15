@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <sdf version='1.7'>
   <model name='pico'>
-    <pose>0 0 -3 0 0 0</pose>
+    <pose>0 0 -1 0 0 0</pose>
     <link name="hull">
     	<pose>0 0 0 0 0 0</pose>
       <inertial>
@@ -361,7 +361,6 @@
       </link>
     </plugin>
     
-
     <plugin name="ThrusterPlugin" filename="libThrusterPlugin.so"/>
 
     <plugin name="DepthSensorPlugin" filename="libDepthSensorPlugin.so"/>

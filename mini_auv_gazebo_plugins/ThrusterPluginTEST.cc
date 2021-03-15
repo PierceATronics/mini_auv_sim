@@ -24,12 +24,12 @@ int main(int _argc, char **_argv){
     for(int i = 0; i<100; i++){
       gazebo::common::Time::MSleep(10);
       double thrust = -0.05 * (double)i;
-      thrustCmd.set_thruster1(thrust);
-      thrustCmd.set_thruster2(0);
-      thrustCmd.set_thruster3(thrust);
-      thrustCmd.set_thruster4(thrust);
-      thrustCmd.set_thruster5(0);
-      thrustCmd.set_thruster6(thrust);
+      thrustCmd.set_thruster1(0);
+      thrustCmd.set_thruster2(10);
+      thrustCmd.set_thruster3(0);
+      thrustCmd.set_thruster4(0);
+      thrustCmd.set_thruster5(-10);
+      thrustCmd.set_thruster6(0);
     
       thrustCmdPub->WaitForConnection();
       thrustCmdPub->Publish(thrustCmd);
@@ -38,14 +38,14 @@ int main(int _argc, char **_argv){
     for(int i = 99; i>=50; i--){
       gazebo::common::Time::MSleep(10);
       double thrust = -0.05 * (double)i;
-      thrustCmd.set_thruster1(thrust);
-      thrustCmd.set_thruster2(0);
-      thrustCmd.set_thruster3(thrust);
-      thrustCmd.set_thruster4(thrust);
-      thrustCmd.set_thruster5(0);
-      thrustCmd.set_thruster6(thrust);
+      thrustCmd.set_thruster1(0);
+      thrustCmd.set_thruster2(10);
+      thrustCmd.set_thruster3(0);
+      thrustCmd.set_thruster4(0);
+      thrustCmd.set_thruster5(-10);
+      thrustCmd.set_thruster6(0);
     
-      thrustCmdPub->WaitForConnection();
+     thrustCmdPub->WaitForConnection();
       thrustCmdPub->Publish(thrustCmd);
     }
 
