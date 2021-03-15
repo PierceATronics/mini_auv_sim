@@ -11,10 +11,6 @@ include_directories(${GAZEBO_INCLUDE_DIRS})
 link_directories(${GAZEBO_LIBRARY_DIRS})
 list(APPEND CMAKE_CXX_FLAGS "${GAZEBO_CXX_FLAGS}")
 
-add_executable(PIDControl src/PIDControl.cc)
-target_link_libraries(PIDControl ${GAZEBO_LIBRARIES} mini_auv_gazebo_msgs Eigen3::Eigen)
-add_dependencies(PIDControl mini_auv_gazebo_msgs)
-
 add_library(PIDController6DOF src/PIDController6DOF.cc)
 target_link_libraries(PIDController6DOF Eigen3::Eigen ignition-math6::ignition-math6)
 
