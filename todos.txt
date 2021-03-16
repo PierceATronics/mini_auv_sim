@@ -1,0 +1,6 @@
+Todo's for this project
+
+    - Make the serial port name of the PicoSensorHubEmulator related to which pico vehicle it is...
+        This gives the ability to run multiple vehicles.
+
+    -Implement the custom IMU sensor in the PicoSEnsorHubEmulator.

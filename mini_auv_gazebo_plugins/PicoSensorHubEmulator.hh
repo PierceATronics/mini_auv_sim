@@ -4,6 +4,8 @@
 #include <gazebo/common/common.hh>
 #include <thread>
 #include <chrono>
+#include <boost/asio/serial_port.hpp>
+#include <boost/asio.hpp>
 
 namespace gazebo{
 
@@ -31,10 +33,13 @@ namespace gazebo{
             //  position of specified surface in world. Default z = 0.0
             double surface_pos_z = 0.0;
 
-            std::chrono::high_resolution_clock::time_point start_time;
+           std::chrono::high_resolution_clock::time_point _restart_time;
 
             double _cnt;
-             
+            double serial_loop_dt = 10.0; //Serial looping rate in milliseconds
+            
+            boost::asio::io_service io;
+            std::unique_ptr<boost::asio::serial_port> port;
     };
 
 }

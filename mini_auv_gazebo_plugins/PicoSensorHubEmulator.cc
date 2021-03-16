@@ -15,8 +15,22 @@ void PicoSensorHubEmulator::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf
     //  connect update callback to Gazebo world update event.
     this->update_connection = event::Events::ConnectWorldUpdateBegin(
         std::bind(&PicoSensorHubEmulator::on_update, this));
+   
+    //Attempt to connect to the serial port...thow exception if cannot connect
+    //the serial port shall be open prior to starting up the vehicle.
+    //Create the port and assign it to the class member variable. 
+    std::unique_ptr<boost::asio::serial_port> temp_port(new boost::asio::serial_port(this->io));
+    this->port = std::move(temp_port);
     
-   this->_cnt = 0.0;
+    //open the port
+    //TODO: Get the port name from model name at load.
+    std::cout << "Waiting to connect to port /dev/pts/5...make sure to open port." << std::endl;
+    
+    boost::system::error_code ec;
+    this->port->open("/dev/pts/5", ec);
+    std::cout << "Is the serial port open? " <<  this->port->is_open() << std::endl;
+
+    this->_cnt = 0.0;
 }
 
 void PicoSensorHubEmulator::on_update(){
@@ -29,9 +43,9 @@ void PicoSensorHubEmulator::on_update(){
     //TODO: Add the emulation of the IMU.
     //
     //Send the data via the virtual serial port at a fixed rate.
-    if(this->_cnt < 10.0){
-            
-        auto dt = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - this->start_time);
+    if(this->_cnt < this->serial_loop_dt){
+                    
+        auto dt = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - this->_restart_time);
     
         this->_cnt = dt.count();
     }
@@ -42,34 +56,9 @@ void PicoSensorHubEmulator::on_update(){
         
         //----------------------------------------------------------------//
 
-        std::cout << "Sending some rad sensor data" << this->_cnt <<  '\n';
-        this->start_time = std::chrono::high_resolution_clock::now();
+        //std::cout << "Sending some rad sensor data" << this->_cnt <<  '\n';
+        this->_restart_time = std::chrono::high_resolution_clock::now();
         this->_cnt = 0.0;
     }
 }
-/*
-void PicoSensorHubEmulator::com_loop(){
-    
-     
-    //wait for requests for data, send sensor data upon a valid request.
-    while(com_loop_running){
-        
-        //Start the timer for consistent looping rate
-         auto start_time = std::chrono::high_resolution_clock::now();
 
-        //do stuff
-        //
-        std::cout << "Sending some datas" << '\n';
-
-        //time accumulated since start time.
-        auto dt = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - start_time);
-        
-        //Busy while loop to get good time resolution.
-        while(dt.count() < com_loop_rate.count()){
-             auto dt = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - start_time);
-      
-        }
-            
-    }
-}
-*/
