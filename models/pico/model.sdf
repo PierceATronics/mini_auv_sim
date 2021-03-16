@@ -366,10 +366,12 @@
         <volume>0.25e-02</volume>
       </link>
     </plugin>
-    
+   
     <plugin name="ThrusterPlugin" filename="libThrusterPlugin.so"/>
 
     <plugin name="DepthSensorPlugin" filename="libDepthSensorPlugin.so"/>
     
+    <plugin name="PicoSensorHubEmulator" filename="libPicoSensorHubEmulator.so"/>
+
   </model>
 </sdf>

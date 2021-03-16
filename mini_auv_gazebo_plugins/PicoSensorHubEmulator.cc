@@ -16,10 +16,7 @@ void PicoSensorHubEmulator::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf
     this->update_connection = event::Events::ConnectWorldUpdateBegin(
         std::bind(&PicoSensorHubEmulator::on_update, this));
     
-    //spawn a thread for the com loop
-    this->com_loop_running = true;
-    com_loop_rate = std::chrono::duration<double>(0.010);
-    std::thread com_thread (std::bind(&PicoSensorHubEmulator::com_loop, this));
+   this->_cnt = 0.0;
 }
 
 void PicoSensorHubEmulator::on_update(){
@@ -28,9 +25,29 @@ void PicoSensorHubEmulator::on_update(){
     ignition::math::Pose3d world_pos = this->model->WorldPose();
     relative_depth = surface_pos_z - world_pos.Z();
     
+ 
     //TODO: Add the emulation of the IMU.
-}
+    //
+    //Send the data via the virtual serial port at a fixed rate.
+    if(this->_cnt < 10.0){
+            
+        auto dt = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - this->start_time);
+    
+        this->_cnt = dt.count();
+    }
+    
+    //  check serial requests, send needed responses, and reset the timer.
+    else{
+        //----------PUT SERIAL COMMUNCIATION EMULATION HERE!!!!!-----------//
+        
+        //----------------------------------------------------------------//
 
+        std::cout << "Sending some rad sensor data" << this->_cnt <<  '\n';
+        this->start_time = std::chrono::high_resolution_clock::now();
+        this->_cnt = 0.0;
+    }
+}
+/*
 void PicoSensorHubEmulator::com_loop(){
     
      
@@ -55,3 +72,4 @@ void PicoSensorHubEmulator::com_loop(){
             
     }
 }
+*/
