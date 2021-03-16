@@ -4,10 +4,6 @@
 #include <chrono>
 #include "PIDController6DOF.hh"
 
-
-#include "PIDControl.hh"
-
-
 typedef Eigen::Matrix<double, 6, 6> Matrix6d;
 typedef Eigen::Matrix<double, 6, 1> Vector6d;
 
