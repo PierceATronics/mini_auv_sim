@@ -6,6 +6,7 @@
 #include <chrono>
 #include <boost/asio/serial_port.hpp>
 #include <boost/asio.hpp>
+#include "Serial.h"
 
 namespace gazebo{
 
@@ -39,7 +40,8 @@ namespace gazebo{
             double serial_loop_dt = 10.0; //Serial looping rate in milliseconds
             
             boost::asio::io_service io;
-            std::unique_ptr<boost::asio::serial_port> port;
+            std::unique_ptr<serial::Serial> port;
+            std::future<std::vector<uint8_t>> req_buffer;
     };
 
 }

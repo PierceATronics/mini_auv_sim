@@ -10,25 +10,26 @@ void PicoSensorHubEmulator::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf
     this->sdf = _sdf;
     
     this->relative_depth = 0.0;
-
-
+    
+    
+    
     //  connect update callback to Gazebo world update event.
     this->update_connection = event::Events::ConnectWorldUpdateBegin(
         std::bind(&PicoSensorHubEmulator::on_update, this));
-   
-    //Attempt to connect to the serial port...thow exception if cannot connect
-    //the serial port shall be open prior to starting up the vehicle.
-    //Create the port and assign it to the class member variable. 
-    std::unique_ptr<boost::asio::serial_port> temp_port(new boost::asio::serial_port(this->io));
-    this->port = std::move(temp_port);
     
-    //open the port
-    //TODO: Get the port name from model name at load.
-    std::cout << "Waiting to connect to port /dev/pts/5...make sure to open port." << std::endl;
+        
+    //create a serial port and assign it to the class member variable
+    std::unique_ptr<serial::Serial> s(new serial::Serial);
+    this->port = std::move(s);
+
+    std::string model_name = this->model->GetName();
+    std::string port_name("/dev/");
+    port_name.append(this->model->GetName()).append("S"); 
+    std::cout << port_name << std::endl;
     
-    boost::system::error_code ec;
-    this->port->open("/dev/pts/5", ec);
-    std::cout << "Is the serial port open? " <<  this->port->is_open() << std::endl;
+    this->port->open(port_name.c_str(), 115200);
+    std::cout << "Is there serial port " << port_name << " open?  " << this->port->isOpen() << std::endl;
+    
 
     this->_cnt = 0.0;
 }
@@ -54,8 +55,20 @@ void PicoSensorHubEmulator::on_update(){
     else{
         //----------PUT SERIAL COMMUNCIATION EMULATION HERE!!!!!-----------//
         
+        //read some data if available
+        //  ->If a request has been made, process the request
+        //  ->If the request is valid, package the data and send the data.
         //----------------------------------------------------------------//
-
+        
+        std::vector<uint8_t> some_data = {0x4D, 0x51};
+        this->port->transmit(some_data);
+        std::cout << "Here" << std::endl;
+        
+        req_buffer = this->port->receiveAsync(1, 5000);
+        std::cout << "did i get past" << std::endl;
+        
+        std::cout << req_buffer.valid() << std::endl;
+        if(req_buffer.get()[0] == 'H') std::cout << "Got good data" << std::endl;
         //std::cout << "Sending some rad sensor data" << this->_cnt <<  '\n';
         this->_restart_time = std::chrono::high_resolution_clock::now();
         this->_cnt = 0.0;
