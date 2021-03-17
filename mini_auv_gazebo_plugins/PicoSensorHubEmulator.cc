@@ -1,48 +1,85 @@
 #include "PicoSensorHubEmulator.hh"
 
-using namespace gazebo;
 
-GZ_REGISTER_MODEL_PLUGIN(PicoSensorHubEmulator);
-
-void PicoSensorHubEmulator::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf){
-
-    this->model = _parent;
-    this->sdf = _sdf;
+PicoSensorHubEmulator::PicoSensorHubEmulator(std::string &_model_name){
     
-    this->relative_depth = 0.0;
-    
-    
-    
-    //  connect update callback to Gazebo world update event.
-    this->update_connection = event::Events::ConnectWorldUpdateBegin(
-        std::bind(&PicoSensorHubEmulator::on_update, this));
-    
-        
+    /*
     //create a serial port and assign it to the class member variable
     std::unique_ptr<serial::Serial> s(new serial::Serial);
     this->port = std::move(s);
 
-    std::string model_name = this->model->GetName();
+    this->model_name = _model_name;
     std::string port_name("/dev/");
-    port_name.append(this->model->GetName()).append("S"); 
+    port_name.append(model_name).append("S"); 
     std::cout << port_name << std::endl;
     
+    //Open the serial port
     this->port->open(port_name.c_str(), 115200);
     std::cout << "Is there serial port " << port_name << " open?  " << this->port->isOpen() << std::endl;
+   
+    */
+    //Set up the gazebo connections
+    this->node = gazebo::transport::NodePtr(new gazebo::transport::Node());
+    this->node->Init();
     
-
-    this->_cnt = 0.0;
+    this->depth_sub = this->node->Subscribe("~/depth", &PicoSensorHubEmulator::depth_unpack_callback, this);
+    this->imu_sub = this->node->Subscribe("~/pico/hull/imu_sensor/imu", 
+            &PicoSensorHubEmulator::imu_unpack_callback, this);
 }
 
-void PicoSensorHubEmulator::on_update(){
+void PicoSensorHubEmulator::depth_unpack_callback(DoublePtr &depth_msg){
 
-    //Get the depth from the vehicle
-    ignition::math::Pose3d world_pos = this->model->WorldPose();
-    relative_depth = surface_pos_z - world_pos.Z();
+    this->z = depth_msg->data();
+
+}
+
+void PicoSensorHubEmulator::imu_unpack_callback(IMUPtr &imu_msg){
     
+    auto qx = imu_msg->orientation().x();
+    auto qy = imu_msg->orientation().y();
+    auto qz = imu_msg->orientation().z();
+    auto qw = imu_msg->orientation().w();
+
+    //  Cvt quaternion to Euler (roll, pitch ,yaw)
+    ignition::math::Quaternion Q(qw, qx, qy, qz);
+
+    roll = Q.Roll();
+    pitch = Q.Pitch();
+    //  TODO: THIS MAY NOT BE THE CORRECT YAW: USE MAGNETOMETER.
+    yaw = Q.Yaw();
+    
+    std::cout << "Orientation --" << '\n';
+    std::cout << "\tRoll:  " << roll << '\n';
+    std::cout << "\tPitch: " << pitch << '\n';
+    std::cout << "\tYaw:   " << yaw << '\n';
+    std::cout << "Depth: " << z << '\n';
+
+
+}
+void PicoSensorHubEmulator::run(){
+
+    while(true){
+
+
+    }
+
+}
+
+
+
+
+int main(int _argc, char **_argv){
+    
+    gazebo::client::setup(_argc, _argv);
+    
+    std::string model_name("pico");
+    PicoSensorHubEmulator pico_sensorhub_emulator(model_name);
+    pico_sensorhub_emulator.run();
+    return(0);
+
+}
+/*    
  
-    //TODO: Add the emulation of the IMU.
-    //
     //Send the data via the virtual serial port at a fixed rate.
     if(this->_cnt < this->serial_loop_dt){
                     
@@ -74,4 +111,4 @@ void PicoSensorHubEmulator::on_update(){
         this->_cnt = 0.0;
     }
 }
-
+*/

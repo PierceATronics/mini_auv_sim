@@ -35,8 +35,9 @@ target_link_libraries(DepthSensorPlugin ${GAZEBO_LIBRARIES} mini_auv_gazebo_msgs
 add_dependencies(DepthSensorPlugin mini_auv_gazebo_msgs)
 
 
-add_library(PicoSensorHubEmulator SHARED PicoSensorHubEmulator.cc)
-target_link_libraries(PicoSensorHubEmulator ${GAZEBO_LIBRARIES})
+add_executable(PicoSensorHubEmulator PicoSensorHubEmulator.cc)
+target_link_libraries(PicoSensorHubEmulator ${GAZEBO_LIBRARIES} mini_auv_gazebo_msgs)
+#target_include_directories(PicoSensorHubEmulator ${CMAKE_CURRENT_SOURCE_DIR}
 
 add_executable(ThrusterPluginTEST ThrusterPluginTEST.cc)
 add_dependencies(ThrusterPluginTEST mini_auv_gazebo_msgs)

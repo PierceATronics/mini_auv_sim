@@ -2,47 +2,54 @@
 #include <gazebo/gazebo.hh>
 #include <gazebo/physics/physics.hh>
 #include <gazebo/common/common.hh>
+#include <gazebo/transport/transport.hh>
+#include <gazebo/gazebo_client.hh>
+#include <ignition/math/PID.hh>
+#include <ignition/math/Quaternion.hh>
+#include "mini_auv_gazebo_msgs/Double.pb.h"
+#include "mini_auv_gazebo_msgs/ThrustCmd.pb.h"
 #include <thread>
 #include <chrono>
-#include <boost/asio/serial_port.hpp>
-#include <boost/asio.hpp>
 #include "Serial.h"
 
-namespace gazebo{
+typedef const boost::shared_ptr<const mini_auv_gazebo_msgs::msgs::Double> DoublePtr;
+typedef const boost::shared_ptr<const mini_auv_gazebo_msgs::msgs::ThrustCmd> ThrustCmdPtr;
+typedef const boost::shared_ptr<const gazebo::msgs::IMU> IMUPtr;
 
-    //  Model plugin for the Pico AUV that emulates the sensor hub by sending data via a virtual serial
-    //  port
-    class PicoSensorHubEmulator : public ModelPlugin{
 
-        public:
+class PicoSensorHubEmulator{
+
+    public:
         
-            void Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf);
+        PicoSensorHubEmulator(std::string &_model_name);
+        
+        //Main loop receives serial requests and gives response (of sensor data);
+        void run(); 
             
-            //  Callback function called by the gazebo simulator at each simulation iteration
-            void on_update();
-            
-            
-        private:
-            
-            physics::ModelPtr model;
-            sdf::ElementPtr sdf;
-            event::ConnectionPtr update_connection;
+    private:
+       
+        //Set up the transport to get data from the model in the gazebo simulator
+        gazebo::transport::NodePtr node;
+        gazebo::transport::SubscriberPtr depth_sub;
+        gazebo::transport::SubscriberPtr imu_sub;
+        
+        double roll, pitch, yaw, x, y, z;
+        
+        std::string model_name;
+        std::chrono::high_resolution_clock::time_point _restart_time;
 
-            //  relative depth (value that would be from physical pressure/depth sensor). 
-            double relative_depth;
+        double serial_loop_dt = 10.0; //Serial looping rate in milliseconds
+        
+        //Serial port connection
+        std::unique_ptr<serial::Serial> port;
 
-            //  position of specified surface in world. Default z = 0.0
-            double surface_pos_z = 0.0;
+        //  Callback func for the depth data subscriber.
+        void depth_unpack_callback(DoublePtr &depth_msg);
 
-           std::chrono::high_resolution_clock::time_point _restart_time;
+        //  Callback func for the imu data subscriber.
+        void imu_unpack_callback(IMUPtr &imu_msg);
 
-            double _cnt;
-            double serial_loop_dt = 10.0; //Serial looping rate in milliseconds
-            
-            boost::asio::io_service io;
-            std::unique_ptr<serial::Serial> port;
-            std::future<std::vector<uint8_t>> req_buffer;
-    };
 
-}
+};
+
 
