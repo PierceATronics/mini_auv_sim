@@ -3,7 +3,6 @@
 
 PicoSensorHubEmulator::PicoSensorHubEmulator(std::string &_model_name){
     
-    /*
     //create a serial port and assign it to the class member variable
     std::unique_ptr<serial::Serial> s(new serial::Serial);
     this->port = std::move(s);
@@ -17,7 +16,6 @@ PicoSensorHubEmulator::PicoSensorHubEmulator(std::string &_model_name){
     this->port->open(port_name.c_str(), 115200);
     std::cout << "Is there serial port " << port_name << " open?  " << this->port->isOpen() << std::endl;
    
-    */
     //Set up the gazebo connections
     this->node = gazebo::transport::NodePtr(new gazebo::transport::Node());
     this->node->Init();
@@ -48,18 +46,36 @@ void PicoSensorHubEmulator::imu_unpack_callback(IMUPtr &imu_msg){
     //  TODO: THIS MAY NOT BE THE CORRECT YAW: USE MAGNETOMETER.
     yaw = Q.Yaw();
     
+    /*
     std::cout << "Orientation --" << '\n';
     std::cout << "\tRoll:  " << roll << '\n';
     std::cout << "\tPitch: " << pitch << '\n';
     std::cout << "\tYaw:   " << yaw << '\n';
     std::cout << "Depth: " << z << '\n';
-
+    */
 
 }
 void PicoSensorHubEmulator::run(){
-
+    
+    std::future<std::vector<uint8_t>> future;
+    std::vector<uint8_t> received_data;
     while(true){
 
+        future = this->port->receiveAsync(1);
+        received_data = future.get();
+
+        if(received_data[0] == 0xA4){
+            future = this->port->receiveAsync(2);
+            received_data = future.get();
+            
+            //Check for valid end byte
+            if(received_data[1] == 0xA0){
+                
+                //send depth data
+                if(received_data[0] == 0x02){std::cout << "Good data" << std::endl;} 
+
+            }
+        }
 
     }
 
