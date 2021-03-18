@@ -16,6 +16,13 @@ typedef const boost::shared_ptr<const mini_auv_gazebo_msgs::msgs::Double> Double
 typedef const boost::shared_ptr<const mini_auv_gazebo_msgs::msgs::ThrustCmd> ThrustCmdPtr;
 typedef const boost::shared_ptr<const gazebo::msgs::IMU> IMUPtr;
 
+//Used to conveintely pack floats into 4bytes for serial transmission.
+union float_char{
+    
+    float f;
+    uint8_t c[4];
+
+};
 
 class PicoSensorHubEmulator{
 
@@ -35,6 +42,12 @@ class PicoSensorHubEmulator{
         
         double roll, pitch, yaw, x, y, z;
         
+        const uint8_t HEADER_BYTE = 0xA4;
+        const uint8_t DEPTH_CMD = 0x02;
+        const uint8_t IMU_CMD = 0x03;
+        const uint8_t ALL_SENSOR_CMD = 0x04;
+        const uint8_t END_BYTE    = 0xA0;
+
         std::string model_name;
         std::chrono::high_resolution_clock::time_point _restart_time;
 
@@ -48,8 +61,14 @@ class PicoSensorHubEmulator{
 
         //  Callback func for the imu data subscriber.
         void imu_unpack_callback(IMUPtr &imu_msg);
+        
+        void send_depth_data();
+        
+        void send_imu_data();
 
-
+        void send_all_sensor_data();
+        
+        std::vector<uint8_t> pack_floats(std::vector<float> &f);
 };
 
 

@@ -60,7 +60,8 @@ void PicoSensorHubEmulator::run(){
     std::future<std::vector<uint8_t>> future;
     std::vector<uint8_t> received_data;
     while(true){
-
+        
+        //Wait to receive request message
         future = this->port->receiveAsync(1);
         received_data = future.get();
 
@@ -72,8 +73,11 @@ void PicoSensorHubEmulator::run(){
             if(received_data[1] == 0xA0){
                 
                 //send depth data
-                if(received_data[0] == 0x02){std::cout << "Good data" << std::endl;} 
+                if(received_data[0] == 0x02){this->send_depth_data();} 
+                
+                else if(received_data[0] == 0x03){this->send_imu_data();}
 
+                else if(received_data[0] == 0x04){this->send_all_sensor_data();} 
             }
         }
 
@@ -81,8 +85,55 @@ void PicoSensorHubEmulator::run(){
 
 }
 
+void PicoSensorHubEmulator::send_depth_data(){
+    
+    std::vector<float> d = {(float)this->z};
+    std::vector<uint8_t> depth_data_packed = this->pack_floats(d);
+    std::vector<uint8_t> packet = {this->HEADER_BYTE, this->DEPTH_CMD, this->END_BYTE};
+    
+    packet.insert(packet.begin() + 2, depth_data_packed.begin(), depth_data_packed.end());
+    this->port->transmit(packet);
+
+}
 
 
+void PicoSensorHubEmulator::send_imu_data(){
+    
+    std::vector<float> d = {(float)this->roll, (float)this->pitch, (float)this->yaw};
+    std::vector<uint8_t> imu_data_packed = this->pack_floats(d);
+    std::vector<uint8_t> packet = {this->HEADER_BYTE, this->IMU_CMD, this->END_BYTE};
+
+    packet.insert(packet.begin() + 2, imu_data_packed.begin(), imu_data_packed.end());
+    this->port->transmit(packet);
+
+}
+
+
+void PicoSensorHubEmulator::send_all_sensor_data(){
+     
+    std::vector<float> d = {(float)this->roll, (float)this->pitch, (float)this->yaw, (float)this->z};
+    std::vector<uint8_t> sensor_data_packed = this->pack_floats(d);
+    std::vector<uint8_t> packet = {this->HEADER_BYTE, this->ALL_SENSOR_CMD, this->END_BYTE};
+    
+    packet.insert(packet.begin() + 2, sensor_data_packed.begin(), sensor_data_packed.end());
+    this->port->transmit(packet);
+
+    
+}
+
+
+std::vector<uint8_t> PicoSensorHubEmulator::pack_floats(std::vector<float> &f){
+    
+    std::vector<uint8_t> floats_packed;
+    for(int i = 0; i < f.size(); i++){
+        float_char packer;
+        packer.f = f[i];
+
+        for(int j = 0; j < 4; j++){floats_packed.push_back(packer.c[j]);}
+    }
+
+    return(floats_packed);
+}
 
 int main(int _argc, char **_argv){
     
