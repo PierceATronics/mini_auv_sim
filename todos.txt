@@ -1,6 +1,15 @@
 Todo's for this project
+    
+    - Make PicoMaestroEmulator.cc/.hh
 
-    - Make the serial port name of the PicoSensorHubEmulator related to which pico vehicle it is...
-        This gives the ability to run multiple vehicles.
+    - Make a Camera data transport
 
-    -Implement the custom IMU sensor in the PicoSEnsorHubEmulator.
+    - Add the socat commands, PicoSensorHubEmulator, and PicoMaestroEmulator to a "launch" script
+      for easy start up.
+
+    - Make the README
+
+    - Make a new pool world
+        - include basic obstacles
+
+https://github.com/mpromonet/libv4l2cpp
