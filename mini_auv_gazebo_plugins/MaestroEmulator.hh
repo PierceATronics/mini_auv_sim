@@ -10,6 +10,7 @@
 #include <thread>
 #include <chrono>
 #include "Serial.h"
+#include "BasicESC.hh"
 
 typedef const boost::shared_ptr<const mini_auv_gazebo_msgs::msgs::ThrustCmd> ThrustCmdPtr;
 
@@ -30,7 +31,7 @@ class MaestroEmulator{
     private:
         
         gazebo::transport::NodePtr node;
-        gazebo::transport::PublisherPtr thrust_pub;
+        gazebo::transport::PublisherPtr thrust_cmd_pub;
         State state;
 
         //Serial port connection
@@ -40,10 +41,8 @@ class MaestroEmulator{
         
         //package the thrusts into protobuf and publish.
         void publish_thrust_cmd(std::vector<double> &thrusts);
-
-
         
-
+        std::unique_ptr<BasicESC> esc;
 
 };
 

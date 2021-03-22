@@ -3,7 +3,6 @@
 MaestroEmulator::MaestroEmulator(std::string &_model_name){
     
     this->model_name = _model_name;
-    
     this->node = gazebo::transport::NodePtr(new gazebo::transport::Node());
     this->node->Init();
 
@@ -15,15 +14,16 @@ MaestroEmulator::MaestroEmulator(std::string &_model_name){
     this->port = std::move(s);
 
     std::string port_name("/dev/");
-    port_name.append(model_name).append("/maestro/S");
+    port_name.append(model_name).append("MaestroS");
     std::cout << port_name << std::endl;
-
+    
     //Open the serial port
     this->port->open(port_name.c_str(), 115200);
     
     std::cout << "Is there serial port " << port_name << " open?  " << this->port->isOpen() << std::endl;
 
-
+    std::unique_ptr<BasicESC> e(new BasicESC);
+    this->esc = std::move(e);
 }
 
 
@@ -65,6 +65,7 @@ void MaestroEmulator::run(){
                 if(received_data[0] == 0x84){state = State::ReadChannel;}
                 else{break;}
             
+            //Get the channel (motor #) to write
             case State::ReadChannel :
                 
                 future = this->port->receiveAsync(1);
@@ -73,7 +74,7 @@ void MaestroEmulator::run(){
                 //invalid channel number...throw away this command.
                 if(received_data[0] > (uint8_t)6){state = State::ReadHeader; break;}
                 
-                channel = received[0];
+                channel = received_data[0];
                 state = State::ReadCmd;
             
             //Extract the pulse width command that the maestro would receive.
@@ -89,10 +90,13 @@ void MaestroEmulator::run(){
             //Map the pulsewidth to the correct thrust force.
             case State::SetThrust :
                 
-                std::cout << "Channel " << channel << "Pulse Width: " << pulse_width << std::endl;
+                //std::cout << "Channel " << (int)channel << " Pulse Width: " << pulse_width << std::endl;
                 //TODO: Write a mapping function from pulsewidth to thruster force
                 //This might require writing a class to emulate the configurations 
                 //of the blue robotics ESC's.
+
+                auto thrust = this->esc->map((double)(pulse_width) / 4.0); 
+                std::cout << "Thruster " << (int)channel << ":" << thrust << "N" << std::endl;
                 state = State::ReadHeader;
                 break; 
 
@@ -110,7 +114,10 @@ int main(int _argc, char **_argv){
     //Connect to gazebo server 
     gazebo::client::setup(_argc, _argv);
     
-    MaestroEmulator maestro_emulator("pico");
+    std::string model_name("pico");
+    MaestroEmulator maestro_emulator(model_name);
+
+    maestro_emulator.run();
     return(0);
 }
 
