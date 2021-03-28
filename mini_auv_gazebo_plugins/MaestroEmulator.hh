@@ -42,6 +42,8 @@ class MaestroEmulator{
         //package the thrusts into protobuf and publish.
         void publish_thrust_cmd(std::vector<double> &thrusts);
         
+        std::vector<double> thrust_state;
+
         std::unique_ptr<BasicESC> esc;
 
 };

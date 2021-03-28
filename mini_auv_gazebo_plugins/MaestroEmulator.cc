@@ -9,6 +9,7 @@ MaestroEmulator::MaestroEmulator(std::string &_model_name){
     this->thrust_cmd_pub = this->node->Advertise<mini_auv_gazebo_msgs::msgs::ThrustCmd>(
             "~/thrust_cmd");
     
+    
     //create a serial port and assign it to the class member variable
     std::unique_ptr<serial::Serial> s(new serial::Serial);
     this->port = std::move(s);
@@ -53,6 +54,9 @@ void MaestroEmulator::run(){
     this->state = State::ReadHeader;
     
     uint16_t pulse_width;
+    
+    for(int j = 0; j < 6; j++){this->thrust_state.push_back(0.0);}
+
     while(true){
 
         switch(state){
@@ -94,9 +98,19 @@ void MaestroEmulator::run(){
                 //TODO: Write a mapping function from pulsewidth to thruster force
                 //This might require writing a class to emulate the configurations 
                 //of the blue robotics ESC's.
+                
+                auto thrust_percentage = this->esc->map((double)(pulse_width) / 4.0); 
+                std::cout << "Thruster " << (int)channel << ":" << thrust_percentage << "%" << std::endl;
+                
 
-                auto thrust = this->esc->map((double)(pulse_width) / 4.0); 
-                std::cout << "Thruster " << (int)channel << ":" << thrust << "N" << std::endl;
+                //Now map the thrust percentage to (-100, 100) to the thrust output
+                double ang_vel = 1445.0 * thrust_percentage / 100.0;
+                double Ct = 4.78E-6;
+                double thrust = Ct * ang_vel * abs(ang_vel);
+
+                this->thrust_state[(int)channel - 1] = thrust;
+                this->publish_thrust_cmd(this->thrust_state);
+
                 state = State::ReadHeader;
                 break; 
 
