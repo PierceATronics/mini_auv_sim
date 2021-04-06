@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+
+import subprocess
+from subprocess import Popen
+import os
+
+#ADD THIS SCRIPT TO SYSTEM PATH TO EXECUTE ANYWHERE BY RUNNING
+#   ln -s $PWD/mini_auv_run /usr/bin/mini_auv_run
+
+src_path = os.path.split(os.readlink('/usr/bin/mini_auv_run'))
+
+executables = ["build/mini_auv_gazebo_plugins/MaestroEmulator", 
+            "build/mini_auv_gazebo_plugins/PicoSensorHubEmulator"]
+
+commands = [os.path.join(src_path[0], executable) for executable in executables]
+procs = [Popen(cmd) for cmd in commands]
+for p in procs:
+    p.wait()
+
+
+
