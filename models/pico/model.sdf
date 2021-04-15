@@ -99,7 +99,7 @@
     </link>
 
     <link name="thruster_2">
-      <pose>0 -0.071 0.048 0 0 0</pose>
+      <pose>0 -0.071 0.0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 1.5707963267948966 0</pose>
         <mass>2.599998E-02</mass>
@@ -213,7 +213,7 @@
     </link>
 
     <link name="thruster_5">
-      <pose>0 0.071 0.048 0 0 0</pose>
+      <pose>0 0.071 0.0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 1.5707963267948966 0</pose>
         <mass>2.599998E-02</mass>
@@ -365,7 +365,7 @@
       <fluid_density>1000</fluid_density>
       <link name="hull">
         <center_of_volume>0 0 0</center_of_volume>
-        <volume>0.25e-02</volume>
+        <volume>0.15e-02</volume>
       </link>
     </plugin>
    
