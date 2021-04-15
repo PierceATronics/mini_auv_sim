@@ -12,8 +12,8 @@ def inertia_circular_cylinder(mass, radius, height):
 #The center axis of the cylindrical hull is aligned with the xaxis
 ##################SET PARAMS################################
 hull_mass_lb = 3.0
-hull_radius_in = 3.2 / 2.0
-hull_length_in = 8.0
+hull_radius_in = 1.8
+hull_length_in = 9.05
 
 #model the thruster as a cylinder
 thruster_mass_lb =  0.0573202

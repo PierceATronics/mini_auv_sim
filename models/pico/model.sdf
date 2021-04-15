@@ -7,37 +7,27 @@
       <inertial>
         <mass>1.360776</mass>
         <inertia>
-          <ixx>1.123735E-03</ixx>
+          <ixx>1.42222E-03</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>5.244098E-03</iyy>
+          <iyy>6.703089E-03</iyy>
           <iyz>0</iyz>
-          <izz>5.244098E-03</izz>
+          <izz>6.703089E-03</izz>
         </inertia>
       </inertial>
 
       <visual name='hull_visual'>
-        <pose>0 0 0 0 1.5707963267948966 0</pose>
         <geometry>
-          <cylinder>
-            <radius>4.064000E-02</radius>
-            <length>2.032000E-01</length>
-          </cylinder>
-      </geometry>
-      <material>
-          <ambient>0.5 0.75 0 1</ambient>
-          <specular>0.2 0.2 0.2 64</specular>
-          <diffuse>0.7 0.9 0 1</diffuse>
-          <emissive>0.1 0 0.1 1</emissive>
-      </material>
+            <mesh><uri>model://pico/pico.dae</uri></mesh> 
+        </geometry>    
       </visual>
 
       <collision name='hull_collision'>
         <pose>0 0 0 0 1.5707963267948966 0</pose>
         <geometry>
           <cylinder>
-            <radius>4.064000E-02</radius>
-            <length>2.032000E-01</length>
+            <radius>4.572000E-02</radius>
+            <length>2.2887000E-01</length>
           </cylinder>
         </geometry>
       </collision>
@@ -71,7 +61,7 @@
     </link>
 
     <link name="thruster_1">
-      <pose>0.05 -0.075 0 0 0 0</pose>
+      <pose>0.082 -0.108 0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
         <mass>2.599998E-02</mass>
@@ -84,7 +74,8 @@
           <izz>2.547998E-06</izz>
         </inertia>
       </inertial>
-
+        
+      <!--
       <visual name="thruster_1_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
@@ -94,6 +85,7 @@
           </cylinder>
         </geometry>
       </visual>
+      -->
 
       <collision name="thruster_1_collision">
         <pose>0 0 0 0 0 0</pose>
@@ -107,7 +99,7 @@
     </link>
 
     <link name="thruster_2">
-      <pose>0 -0.060 0 0 0 0</pose>
+      <pose>0 -0.071 0.0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 1.5707963267948966 0</pose>
         <mass>2.599998E-02</mass>
@@ -120,7 +112,8 @@
           <izz>2.547998E-06</izz>
         </inertia>
       </inertial>
-
+      
+      <!-- 
       <visual name="thruster_2_visual">
         <pose>0 0 0 0 1.5707963267948966 0</pose>
         <geometry>
@@ -130,6 +123,7 @@
           </cylinder>
         </geometry>
       </visual>
+      -->
 
       <collision name="thruster_2_collision">
         <pose>0 0 0 0 1.5707963267948966 0</pose>
@@ -143,7 +137,7 @@
     </link>
 
     <link name="thruster_3">
-      <pose>-0.05 -0.075 0 0 0 0</pose>
+      <pose>-0.082 -0.108 0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
         <mass>2.599998E-02</mass>
@@ -156,7 +150,8 @@
           <izz>2.547998E-06</izz>
         </inertia>
       </inertial>
-
+      
+      <!--  
       <visual name="thruster_3_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
@@ -166,6 +161,7 @@
           </cylinder>
         </geometry>
       </visual>
+      -->
 
       <collision name="thruster_3_collision">
         <pose>0 0 0 0 0 0</pose>
@@ -179,7 +175,7 @@
     </link>
 
     <link name="thruster_4">
-      <pose>-0.05 0.075 0 0 0 0</pose>
+      <pose>-0.082 0.108 0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
         <mass>2.599998E-02</mass>
@@ -192,7 +188,8 @@
           <izz>2.547998E-06</izz>
         </inertia>
       </inertial>
-
+     
+      <!--
       <visual name="thruster_4_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
@@ -202,6 +199,7 @@
           </cylinder>
         </geometry>
       </visual>
+      -->
 
       <collision name="thruster_4_collision">
         <pose>0 0 0 0 0 0</pose>
@@ -215,7 +213,7 @@
     </link>
 
     <link name="thruster_5">
-      <pose>0 0.060 0 0 0 0</pose>
+      <pose>0 0.071 0.0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 1.5707963267948966 0</pose>
         <mass>2.599998E-02</mass>
@@ -228,7 +226,8 @@
           <izz>2.547998E-06</izz>
         </inertia>
       </inertial>
-
+        
+      <!--
       <visual name="thruster_5_visual">
         <pose>0 0 0 0 1.5707963267948966 0</pose>
         <geometry>
@@ -238,6 +237,7 @@
           </cylinder>
         </geometry>
       </visual>
+      -->
 
       <collision name="thruster_5_collision">
         <pose>0 0 0 0 1.5707963267948966 0</pose>
@@ -251,7 +251,7 @@
     </link>
 
     <link name="thruster_6">
-      <pose>0.05 0.075 0 0 0 0</pose>
+      <pose>0.082 0.108 0 0 0 0</pose>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
         <mass>2.599998E-02</mass>
@@ -265,6 +265,7 @@
         </inertia>
       </inertial>
 
+      <!--
       <visual name="thruster_6_visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
@@ -274,6 +275,7 @@
           </cylinder>
         </geometry>
       </visual>
+      -->
 
       <collision name="thruster_6_collision">
         <pose>0 0 0 0 0 0</pose>
@@ -363,7 +365,7 @@
       <fluid_density>1000</fluid_density>
       <link name="hull">
         <center_of_volume>0 0 0</center_of_volume>
-        <volume>0.25e-02</volume>
+        <volume>0.15e-02</volume>
       </link>
     </plugin>
    

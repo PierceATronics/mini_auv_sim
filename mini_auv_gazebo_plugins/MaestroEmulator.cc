@@ -108,7 +108,7 @@ void MaestroEmulator::run(){
                 double Ct = 4.78E-6;
                 double thrust = Ct * ang_vel * abs(ang_vel);
 
-                this->thrust_state[(int)channel - 1] = thrust;
+                this->thrust_state[(int)channel] = thrust;
                 this->publish_thrust_cmd(this->thrust_state);
 
                 state = State::ReadHeader;
