@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<sdf version="1.7">
+    <model name="gate">
+        <static>true</static>
+        <link name="base">
+            <inertial>
+                <mass>1.0</mass>
+                <inertia>
+                    <ixx>0.010</ixx>
+                    <ixy>0.0</ixy>
+                    <ixz>0.0</ixz>
+                    <iyy>0.010</iyy>
+                    <iyz>0.0</iyz>
+                    <izz>0.010</izz>
+                </inertia>
+            </inertial>
+
+            <visual name="visual">
+                <geometry>
+                    <mesh><uri>model://gate/gate.dae</uri></mesh>
+                </geometry>
+            </visual>
+
+            <collision name="collision">
+                 <geometry>
+                    <mesh><uri>model://gate/gate.dae</uri></mesh>
+                </geometry>
+            </collision>
+        </link>
+    </model>
+</sdf>
