@@ -17,9 +17,12 @@ executables = ["build/mini_auv_gazebo_plugins/MaestroEmulator",
 
 robot_name = "pico"
 model_path = os.path.join(src_path[0], "models/pico/model.sdf")
+delete_vehicle = ["/usr/bin/gz", "model", "-m", robot_name, "-d"]
 spawn_vehicle = ["/usr/bin/gz", "model", "-m", robot_name, "-f", model_path, 
                 "-x", "0.0", "-y", "0.0", "-z", "-1.0"]
 
+#delete old vehicle
+subprocess.run(delete_vehicle)
 
 #spawn the vehicle
 subprocess.run(spawn_vehicle)
