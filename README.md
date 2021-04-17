@@ -27,6 +27,12 @@ cmake ..
 make
 ```
 
+Navigate to the repos home directory. There is an executable called `mini_auv_run` that makes it simple to spawn the mini auv in gazebo. For ease of use, symbolically link the executable to `/usr/bin/`.
+
+```
+ln -s mini_auv_run /usr/bin/mini_auv_run
+```
+
 ## Run Simulator (for SDSU Mechatronics)
 
 In terminal 1, from the repos home directory, launch Gazebo. The Pico mini auv robot will need to be manually spawned within the Gazebo GUI environment.
@@ -38,6 +44,11 @@ gazebo worlds\underwater_heightmap
 In terminal 2, navigate to the `scripts` directory in the repo and run the following script to create the virutal serial ports (requires sudo privledges)
 ```
 bash launch_virtual_ports
+```
+
+In terminal 3,spawn the mini auv Pico:
+```
+mini_auv_run
 ```
 
 To interface with the simulated AUV, refer to the Mechatronics 2021 repo [MechatronicRobosub2021](https://github.com/DOCgould/MechatronicsRobosub2021)
