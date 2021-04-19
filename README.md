@@ -32,7 +32,7 @@ make
 In terminal 1, from the repos home directory, launch Gazebo. The Pico mini auv robot will need to be manually spawned within the Gazebo GUI environment.
 ```
 source setup.sh
-gazebo worlds\underwater_heightmap
+gazebo worlds/pool_testing.world
 ```
 
 In terminal 2, navigate to the `scripts` directory in the repo and run the following script to create the virutal serial ports (requires sudo privledges)
